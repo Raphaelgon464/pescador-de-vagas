@@ -12,3 +12,5 @@
 2026-10-27 | Resumo usa publicada_em, ou vista_em se não houver data; marca as listadas como alertadas | evita repetir no alerta (U3); resumo vazio ainda envia aviso de que o bot está vivo | - | -
 2026-10-27 | Fonte BR: Trampos.co (API v2 sem chave, 2 primeiras páginas, filtro local) | única fonte BR viável sem chave; robots.txt permite; API não documentada, pode mudar | - | -
 2026-10-27 | Gupy descartada | sem API documentada; portal.api.gupy.io e employability-portal.gupy.io deram 404 | - | -
+2026-10-27 | Jooble: consultas só em inglês com local 'Brazil' (3); removida 'Sao Paulo' | medido: pt-BR/'São Paulo'/'Brasil' retornam 0; br.jooble.org não serve a API; das 27 vagas únicas, 4 batem e todas têm 25–55 dias | - | -
+2026-10-27 | Exclusões em inglês: specialist, architect, arquiteto | 'IT Specialist' passou pelo filtro | - | -

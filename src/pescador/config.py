@@ -12,7 +12,7 @@ KEYWORDS_INCLUSAO: List[str] = [
 
 # Aplicadas só ao título (spec 001): descrição citando "seniors" não deve descartar vaga júnior.
 KEYWORDS_EXCLUSAO: List[str] = [
-    'senior', 'sênior', 'sr', 'pleno', 'especialista', 'coordenador', 'principal', 'staff',
+    'senior', 'sênior', 'sr', 'pleno', 'especialista', 'coordenador', 'principal', 'staff', 'specialist', 'architect', 'arquiteto',
     'lead', 'gerente', 'manager', 'head', 'diretor', 'director', 'chief', 'cto', 'vp', 'vice president', 'iii',
     'analista de suporte n1', 'analista de suporte nível 1',
 ]
@@ -20,7 +20,11 @@ KEYWORDS_EXCLUSAO: List[str] = [
 ESTADO_PADRAO = 'estado.json'
 
 _BUSCA_JOOBLE = 'desenvolvedor OR analista OR suporte OR assistente OR python OR c#'
-CONSULTAS_JOOBLE: List[Tuple[str, str]] = [(_BUSCA_JOOBLE, 'Brazil'), (_BUSCA_JOOBLE, 'Sao Paulo')]
+# Medido em 2026-10-27: a Jooble só devolve vagas do Brasil em inglês e com local 'Brazil';
+# 'Sao Paulo'/'São Paulo'/'Brasil' retornam 0 resultados.
+CONSULTAS_JOOBLE: List[Tuple[str, str]] = [
+    (_BUSCA_JOOBLE, 'Brazil'), ('junior developer', 'Brazil'), ('python developer', 'Brazil'),
+]
 
 
 @dataclass(frozen=True)

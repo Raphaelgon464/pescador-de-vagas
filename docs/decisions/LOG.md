@@ -14,3 +14,4 @@
 2026-10-27 | Gupy descartada | sem API documentada; portal.api.gupy.io e employability-portal.gupy.io deram 404 | - | -
 2026-10-27 | Jooble: consultas só em inglês com local 'Brazil' (3); removida 'Sao Paulo' | medido: pt-BR/'São Paulo'/'Brasil' retornam 0; br.jooble.org não serve a API; das 27 vagas únicas, 4 batem e todas têm 25–55 dias | - | -
 2026-10-27 | Exclusões em inglês: specialist, architect, arquiteto | 'IT Specialist' passou pelo filtro | - | -
+2026-10-27 | Adzuna: 1 chamada `what_or` a cada 30 min via FonteLimitada; última consulta guardada no estado | cota grátis 250/dia e 2500/mês (termos oficiais) vs 288 execuções/dia | - | -

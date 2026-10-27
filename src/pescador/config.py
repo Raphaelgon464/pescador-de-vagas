@@ -1,5 +1,6 @@
 import os
 from dataclasses import dataclass
+from datetime import timedelta
 from typing import List, Mapping, Optional, Tuple
 
 # Perfil de busca (spec 001). Sem segredos: este arquivo é versionado em repo público.
@@ -18,6 +19,13 @@ KEYWORDS_EXCLUSAO: List[str] = [
 ]
 
 ESTADO_PADRAO = 'estado.json'
+
+# Cota grátis da Adzuna: 250/dia e 2500/mês (developer.adzuna.com/docs/terms_of_service).
+# 1 chamada a cada 30 min = no máx. 48/dia (~1440/mês), com folga para testes manuais.
+ADZUNA_INTERVALO = timedelta(minutes=30)
+ADZUNA_PALAVRAS: List[str] = [
+    'desenvolvedor', 'programador', 'analista', 'suporte', 'assistente', 'auxiliar', 'estagiario', 'python',
+]
 
 _BUSCA_JOOBLE = 'desenvolvedor OR analista OR suporte OR assistente OR python OR c#'
 # Medido em 2026-10-27: a Jooble só devolve vagas do Brasil em inglês e com local 'Brazil';

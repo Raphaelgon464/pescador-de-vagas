@@ -6,7 +6,7 @@ Fluxo: `fontes → coletar_vagas → Estado.registrar_todas → Perfil.aceita �
 - `config.py` — segredos via env (`carregar_segredos`), keywords do perfil, consultas Jooble.
 - `models.py` — `Vaga` (fonte-agnóstica; `publicada_em` pode ser None; `contexto` só ajuda a incluir).
 - `http.py` — `ClienteHttp` (Protocol) + `ClienteRequests`. `ErroHttp` nunca leva a URL (chaves) na mensagem.
-- `sources/` — `FonteDeVagas` (Protocol), `coletar_vagas` (dedup + isola falha por fonte), `trampos.py`, `remoteok.py`, `jooble.py`, `datas.py`.
+- `sources/` — `FonteDeVagas` (Protocol), `coletar_vagas` (dedup + isola falha por fonte), `trampos.py`, `remoteok.py`, `jooble.py`, `adzuna.py`, `datas.py`; `limitada.py` (`FonteLimitada`: 1 consulta por intervalo, última consulta guardada no `Estado` — cota de API).
 - `matcher.py` — `Perfil.aceita`: fronteira de palavra, sem acento; exclusão só no título.
 - `store.py` — `Estado` (vagas vistas/alertadas, poda 7 dias) + JSON. Arquivo corrompido falha alto.
 - `mensagens.py` — formatação HTML escapada; `dividir_em_mensagens` ≤ 4096 chars, devolve (texto, ids).

@@ -33,6 +33,7 @@ Workflows: `alerta.yml` (cron */5) e `resumo.yml` (cron `0 11 * * *` = 08:00 BRT
 - [x] T8 Fontes BR: spike (Gupy, Adzuna, Programathor/Remotar: API existe? ToS? data de publicação?) → implementar as aprovadas. Goal: A8. Files: `sources/adzuna.py`, `sources/gupy.py`, `docs/decisions/LOG.md`. Done-check: ≥ 2 fontes com cobertura BR retornam vagas reais em execução local.
 - [x] T9 Workflows + branch `estado` + Secrets. Goal: U1, U2, A2. Files: `.github/workflows/{alerta,resumo}.yml`, remover `buscar-vagas.yml`, `src/requirements.txt`. Done-check: `workflow_dispatch` manual envia alerta real no Telegram; 2º disparo não reenvia.
 - [x] T10 README + reconciliação. Files: `README.md`, `docs/ARCHITECTURE.md`, `docs/INDEX.md`, spec se divergiu. Done-check: INDEX lista todos os docs.
+- [ ] T11 Fonte Adzuna com limite de frequência (cota grátis: 250/dia, 2500/mês). Goal: A8 de verdade. Files: `sources/adzuna.py`, `sources/limitada.py`, `store.py` (última consulta por fonte), `config.py`, `main.py`, `.github/workflows/vagas.yml` (secrets). Done-check: 2 execuções em <30 min fazem 1 só chamada à Adzuna; resposta real do país `br` parseada (exige ADZUNA_APP_ID/KEY do usuário). STATUS: código pronto e testado com respostas simuladas; falta verificar com chaves reais.
 
 ## Verificação final
 Critérios A1–A8 marcados um a um; sem testes automatizados (não solicitados), done-checks acima são manuais.

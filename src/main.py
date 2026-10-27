@@ -8,17 +8,20 @@ from typing import List, Optional
 
 from pescador.alerta import executar_alerta
 from pescador.config import (
-    CONSULTAS_JOOBLE, ESTADO_PADRAO, KEYWORDS_EXCLUSAO, KEYWORDS_INCLUSAO, carregar_segredos,
+    ADZUNA_INTERVALO, ADZUNA_PALAVRAS, CONSULTAS_JOOBLE, ESTADO_PADRAO,
+    KEYWORDS_EXCLUSAO, KEYWORDS_INCLUSAO, carregar_segredos,
 )
 from pescador.http import ClienteHttp, ClienteRequests
 from pescador.matcher import Perfil
 from pescador.notifier import ConsoleNotificador, Notificador, TelegramNotificador
 from pescador.resumo import executar_resumo
 from pescador.sources.base import FonteDeVagas
+from pescador.sources.adzuna import AdzunaFonte
 from pescador.sources.jooble import JoobleFonte
+from pescador.sources.limitada import FonteLimitada
 from pescador.sources.remoteok import RemoteOkFonte
 from pescador.sources.trampos import TramposFonte
-from pescador.store import carregar_estado, salvar_estado
+from pescador.store import Estado, carregar_estado, salvar_estado
 
 
 _EXECUTORES = {'alerta': executar_alerta, 'resumo': executar_resumo}
@@ -32,12 +35,20 @@ def _ler_args(argv: Optional[List[str]]) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
-def _montar_fontes(http: ClienteHttp) -> List[FonteDeVagas]:
+def _montar_adzuna(http: ClienteHttp, estado: Estado, agora: datetime) -> List[FonteDeVagas]:
+    app_id = os.environ.get('ADZUNA_APP_ID', '').strip()
+    app_key = os.environ.get('ADZUNA_APP_KEY', '').strip()
+    if not (app_id and app_key):
+        return []
+    return [FonteLimitada(AdzunaFonte(http, app_id, app_key, ADZUNA_PALAVRAS), estado, ADZUNA_INTERVALO, agora)]
+
+
+def _montar_fontes(http: ClienteHttp, estado: Estado, agora: datetime) -> List[FonteDeVagas]:
     fontes: List[FonteDeVagas] = [TramposFonte(http), RemoteOkFonte(http)]
     chave_jooble = os.environ.get('JOOBLE_API_KEY', '').strip()
     if chave_jooble:
         fontes.append(JoobleFonte(http, chave_jooble, CONSULTAS_JOOBLE))
-    return fontes
+    return fontes + _montar_adzuna(http, estado, agora)
 
 
 def _montar_notificador(dry_run: bool, http: ClienteHttp) -> Notificador:
@@ -57,7 +68,8 @@ def main(argv: Optional[List[str]] = None) -> int:
     agora = datetime.now(timezone.utc)
     try:
         perfil = Perfil(KEYWORDS_INCLUSAO, KEYWORDS_EXCLUSAO)
-        total = _EXECUTORES[args.modo](_montar_fontes(http), perfil, estado, notificador, agora)
+        fontes = _montar_fontes(http, estado, agora)
+        total = _EXECUTORES[args.modo](fontes, perfil, estado, notificador, agora)
     finally:
         estado.podar(agora)
         salvar_estado(estado, args.estado)

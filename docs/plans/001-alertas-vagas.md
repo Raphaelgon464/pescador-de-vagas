@@ -24,7 +24,7 @@ Workflows: `alerta.yml` (cron */5) e `resumo.yml` (cron `0 11 * * *` = 08:00 BRT
 
 ## Tarefas (1 tarefa = 1 commit)
 - [x] T1 Segredos por env. Goal: A7. Files: `src/pescador/config.py`, remover `src/config.py`, `.gitignore`, `src/main.py` (só o import, legado até T6). Done-check: busca pelo token e chat id antigos no repo retorna vazio; falta de env lança erro com nome da variável. Depois `git init` + commit inicial (sem segredos).
-- [ ] T2 Modelo `Vaga` + Protocol de fonte + migrar Jooble/RemoteOK com `publicada_em`. Goal: A4, A8 (parcial). Files: `models.py`, `http.py`, `sources/{base,jooble,remoteok}.py`. Done-check: execução local lista vagas normalizadas; falha de uma fonte loga e segue.
+- [x] T2 Modelo `Vaga` + Protocol de fonte + migrar Jooble/RemoteOK com `publicada_em`. Goal: A4, A8 (parcial). Files: `models.py`, `http.py`, `sources/{base,jooble,remoteok}.py`. Done-check: execução local lista vagas normalizadas; falha de uma fonte loga e segue.
 - [ ] T3 Matcher por palavra inteira. Goal: A3, U4. Files: `matcher.py`, `config.py` (keywords). Done-check: script de verificação manual com 8 títulos (analista/Israel/sênior/pleno/suporte N1/…) imprime resultado esperado.
 - [ ] T4 Store persistente. Goal: A1, A2. Files: `store.py`. Done-check: duas gravações/leituras seguidas; segunda rodada vê tudo como já visto; poda funciona.
 - [ ] T5 Notificador (Telegram + Console). Goal: A5. Files: `notifier.py`. Done-check: 60 vagas fictícias geram N mensagens ≤ 4096 caracteres, nenhuma perdida, `<`/`&` escapados.

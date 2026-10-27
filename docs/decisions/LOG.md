@@ -10,3 +10,5 @@
 2026-10-27 | Marca "alertada" por mensagem enviada, não no fim | falha no meio não duplica nem perde vagas | - | -
 2026-10-27 | ErroHttp.corpo fora da mensagem; só o Telegram o exibe | URL/corpo de Jooble podem carregar chave; logs do Actions são públicos | - | -
 2026-10-27 | Resumo usa publicada_em, ou vista_em se não houver data; marca as listadas como alertadas | evita repetir no alerta (U3); resumo vazio ainda envia aviso de que o bot está vivo | - | -
+2026-10-27 | Fonte BR: Trampos.co (API v2 sem chave, 2 primeiras páginas, filtro local) | única fonte BR viável sem chave; robots.txt permite; API não documentada, pode mudar | - | -
+2026-10-27 | Gupy descartada | sem API documentada; portal.api.gupy.io e employability-portal.gupy.io deram 404 | - | -

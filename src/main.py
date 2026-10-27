@@ -17,6 +17,7 @@ from pescador.resumo import executar_resumo
 from pescador.sources.base import FonteDeVagas
 from pescador.sources.jooble import JoobleFonte
 from pescador.sources.remoteok import RemoteOkFonte
+from pescador.sources.trampos import TramposFonte
 from pescador.store import carregar_estado, salvar_estado
 
 
@@ -32,7 +33,7 @@ def _ler_args(argv: Optional[List[str]]) -> argparse.Namespace:
 
 
 def _montar_fontes(http: ClienteHttp) -> List[FonteDeVagas]:
-    fontes: List[FonteDeVagas] = [RemoteOkFonte(http)]
+    fontes: List[FonteDeVagas] = [TramposFonte(http), RemoteOkFonte(http)]
     chave_jooble = os.environ.get('JOOBLE_API_KEY', '').strip()
     if chave_jooble:
         fontes.append(JoobleFonte(http, chave_jooble, CONSULTAS_JOOBLE))

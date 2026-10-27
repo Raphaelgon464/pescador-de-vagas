@@ -31,7 +31,7 @@ Workflows: `alerta.yml` (cron */5) e `resumo.yml` (cron `0 11 * * *` = 08:00 BRT
 - [x] T6 Modo `alerta`. Goal: U1, U3, A1. Files: `alerta.py`, `main.py`. Done-check: dry-run duas vezes: 1ª lista novas, 2ª nada. Marca `alertada` só após envio com sucesso.
 - [x] T7 Modo `resumo`. Goal: U2, A6. Files: `resumo.py`, `main.py`. Done-check: dry-run lista só `publicada_em` ≤ 24h; marca as já alertadas.
 - [x] T8 Fontes BR: spike (Gupy, Adzuna, Programathor/Remotar: API existe? ToS? data de publicação?) → implementar as aprovadas. Goal: A8. Files: `sources/adzuna.py`, `sources/gupy.py`, `docs/decisions/LOG.md`. Done-check: ≥ 2 fontes com cobertura BR retornam vagas reais em execução local.
-- [ ] T9 Workflows + branch `estado` + Secrets. Goal: U1, U2, A2. Files: `.github/workflows/{alerta,resumo}.yml`, remover `buscar-vagas.yml`, `src/requirements.txt`. Done-check: `workflow_dispatch` manual envia alerta real no Telegram; 2º disparo não reenvia.
+- [x] T9 Workflows + branch `estado` + Secrets. Goal: U1, U2, A2. Files: `.github/workflows/{alerta,resumo}.yml`, remover `buscar-vagas.yml`, `src/requirements.txt`. Done-check: `workflow_dispatch` manual envia alerta real no Telegram; 2º disparo não reenvia.
 - [ ] T10 README + reconciliação. Files: `README.md`, `docs/ARCHITECTURE.md`, `docs/INDEX.md`, spec se divergiu. Done-check: INDEX lista todos os docs.
 
 ## Verificação final

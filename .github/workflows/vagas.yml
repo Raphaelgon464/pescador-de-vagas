@@ -1,0 +1,76 @@
+name: Pescador de vagas
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'   # alerta
+    - cron: '0 11 * * *'    # resumo 24h: 08:00 em America/Sao_Paulo (UTC-3, sem horário de verão)
+  workflow_dispatch:
+    inputs:
+      modo:
+        description: Modo de execução
+        type: choice
+        options: [alerta, resumo]
+        default: alerta
+
+permissions:
+  contents: write
+
+# Um por vez: todos os modos leem e reescrevem o mesmo estado.json.
+concurrency:
+  group: estado-vagas
+  cancel-in-progress: false
+
+jobs:
+  pescar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      MODO: ${{ inputs.modo || (github.event.schedule == '0 11 * * *' && 'resumo' || 'alerta') }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Garantir branch estado
+        run: |
+          git config user.name "pescador-bot"
+          git config user.email "pescador-bot@users.noreply.github.com"
+          if ! git ls-remote --exit-code --heads origin estado > /dev/null; then
+            arvore=$(git hash-object -t tree -w /dev/null)
+            inicial=$(git commit-tree "$arvore" -m "estado inicial")
+            git push origin "$inicial:refs/heads/estado"
+          fi
+
+      - uses: actions/checkout@v4
+        with:
+          ref: estado
+          path: estado
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Instalar dependências
+        run: pip install -r src/requirements.txt
+
+      - name: Pescar vagas
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+          JOOBLE_API_KEY: ${{ secrets.JOOBLE_API_KEY }}
+          ESTADO_PATH: ${{ github.workspace }}/estado/estado.json
+        working-directory: src
+        run: python main.py "$MODO"
+
+      # Roda mesmo se o envio falhar: o que já foi entregue precisa ficar marcado, senão repete.
+      # Commit único + force push: a branch guarda só o último estado, sem histórico crescente.
+      - name: Salvar estado
+        if: always()
+        working-directory: estado
+        run: |
+          git config user.name "pescador-bot"
+          git config user.email "pescador-bot@users.noreply.github.com"
+          [ -f estado.json ] || exit 0
+          git add estado.json
+          if ! git diff --cached --quiet; then
+            git commit -q --amend -m "estado"
+            git push -q --force origin HEAD:estado
+          fi

@@ -34,3 +34,8 @@ Receber no Telegram (a) um alerta assim que surgir vaga que bata com o perfil e 
 ## Fora de escopo
 - Candidatura automática, painel web, múltiplos usuários, banco de dados dedicado.
 - Scraping de sites que proíbem em ToS (ex.: LinkedIn).
+
+## Reconciliação (2026-10-27)
+- A8: Trampos.co ativa; 2ª fonte BR (Jooble) implementada, mas só ativa com `JOOBLE_API_KEY`. Gupy inviável (sem API documentada).
+- Local "São Paulo": Trampos.co não informa cidade; filtro por cidade não implementado (ver decisions/OPEN.md).
+- Alerta só para vagas publicadas há ≤ 48h (ver decisions/LOG.md).

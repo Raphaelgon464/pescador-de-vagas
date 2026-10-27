@@ -1,4 +1,5 @@
 # INDEX
+docs/ARCHITECTURE.md — read when mexendo em módulos, fluxo de dados ou workflow
 docs/specs/001-alertas-vagas.md — read when implementing alertas instantâneos/resumo 24h ou mexendo em filtros/fontes
 docs/decisions/LOG.md — read when questionando uma decisão passada
 docs/decisions/OPEN.md — read when escolhendo próximo passo ou risco pendente

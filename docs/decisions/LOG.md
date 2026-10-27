@@ -9,3 +9,4 @@
 2026-10-27 | Alerta só para vagas publicadas há ≤ 48h (ou sem data); mais velhas são registradas sem alertar | 1ª execução inundaria o chat com vagas antigas (RemoteOK traz até 70 dias) | - | -
 2026-10-27 | Marca "alertada" por mensagem enviada, não no fim | falha no meio não duplica nem perde vagas | - | -
 2026-10-27 | ErroHttp.corpo fora da mensagem; só o Telegram o exibe | URL/corpo de Jooble podem carregar chave; logs do Actions são públicos | - | -
+2026-10-27 | Resumo usa publicada_em, ou vista_em se não houver data; marca as listadas como alertadas | evita repetir no alerta (U3); resumo vazio ainda envia aviso de que o bot está vivo | - | -

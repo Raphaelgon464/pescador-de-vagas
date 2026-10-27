@@ -54,6 +54,18 @@ def dividir_em_mensagens(cabecalho: str, itens: Sequence[Tuple[str, str]], limit
     return lotes
 
 
+def mensagens_de_resumo(vagas: Sequence[Tuple[Vaga, bool]], agora: datetime) -> List[Lote]:
+    """Resumo diário; cada item é (vaga, já_alertada). Sem vagas, ainda avisa que o bot está vivo."""
+    if not vagas:
+        return [('📋 <b>RESUMO DAS ÚLTIMAS 24H</b>\n\nNenhuma vaga compatível com o perfil.', [])]
+    cabecalho = f"📋 <b>RESUMO DAS ÚLTIMAS 24H</b> — {len(vagas)} vaga(s)"
+    itens = [
+        (v.id, formatar_vaga(v, agora) + ('\n✅ já alertada' if alertada else ''))
+        for v, alertada in vagas
+    ]
+    return dividir_em_mensagens(cabecalho, itens)
+
+
 def mensagens_de_alerta(vagas: Sequence[Vaga], agora: datetime) -> List[Lote]:
     cabecalho = f"🚨 <b>ALERTA DE VAGAS</b> — {len(vagas)} nova(s)"
     itens = [(v.id, formatar_vaga(v, agora)) for v in vagas]

@@ -31,8 +31,7 @@ def executar_alerta(
     Cada mensagem enviada com sucesso marca suas vagas como alertadas na hora: se um envio
     falhar, o que já foi entregue não é repetido e o resto é tentado na próxima execução.
     """
-    for vaga in coletar_vagas(fontes):
-        estado.registrar(vaga, agora)
+    estado.registrar_todas(coletar_vagas(fontes), agora)
     pendentes = _pendentes(estado, perfil, agora)
     if not pendentes:
         return 0

@@ -13,15 +13,19 @@ from pescador.config import (
 from pescador.http import ClienteHttp, ClienteRequests
 from pescador.matcher import Perfil
 from pescador.notifier import ConsoleNotificador, Notificador, TelegramNotificador
+from pescador.resumo import executar_resumo
 from pescador.sources.base import FonteDeVagas
 from pescador.sources.jooble import JoobleFonte
 from pescador.sources.remoteok import RemoteOkFonte
 from pescador.store import carregar_estado, salvar_estado
 
 
+_EXECUTORES = {'alerta': executar_alerta, 'resumo': executar_resumo}
+
+
 def _ler_args(argv: Optional[List[str]]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description='Pescador de vagas')
-    parser.add_argument('modo', choices=['alerta'], help='alerta: avisa vagas novas que batem com o perfil')
+    parser.add_argument('modo', choices=sorted(_EXECUTORES), help='alerta: vagas novas agora; resumo: últimas 24h')
     parser.add_argument('--dry-run', action='store_true', help='imprime no console em vez de enviar ao Telegram')
     parser.add_argument('--estado', type=Path, default=Path(os.environ.get('ESTADO_PATH', ESTADO_PADRAO)))
     return parser.parse_args(argv)
@@ -51,11 +55,12 @@ def main(argv: Optional[List[str]] = None) -> int:
     estado = carregar_estado(args.estado)
     agora = datetime.now(timezone.utc)
     try:
-        enviadas = executar_alerta(_montar_fontes(http), Perfil(KEYWORDS_INCLUSAO, KEYWORDS_EXCLUSAO), estado, notificador, agora)
+        perfil = Perfil(KEYWORDS_INCLUSAO, KEYWORDS_EXCLUSAO)
+        total = _EXECUTORES[args.modo](_montar_fontes(http), perfil, estado, notificador, agora)
     finally:
         estado.podar(agora)
         salvar_estado(estado, args.estado)
-    print(f"{enviadas} vaga(s) alertada(s)")
+    print(f"{args.modo}: {total} vaga(s) enviada(s)")
     return 0
 
 

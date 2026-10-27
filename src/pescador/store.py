@@ -32,6 +32,10 @@ class Estado:
         self._registros[vaga.id] = Registro(vaga, agora)
         return True
 
+    def registrar_todas(self, vagas: Iterable[Vaga], agora: datetime) -> None:
+        for vaga in vagas:
+            self.registrar(vaga, agora)
+
     def registros(self) -> List[Registro]:
         return list(self._registros.values())
 

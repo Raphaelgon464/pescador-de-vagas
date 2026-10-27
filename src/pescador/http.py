@@ -7,7 +7,15 @@ TIMEOUT_PADRAO_S = 15
 
 
 class ErroHttp(Exception):
-    """Falha de rede/HTTP. A mensagem nunca contém a URL completa: ela pode carregar chaves."""
+    """Falha de rede/HTTP. A mensagem nunca contém a URL completa: ela pode carregar chaves.
+
+    `corpo` guarda o início da resposta de erro, fora da mensagem: só quem sabe que o
+    serviço não ecoa segredos (ex.: Telegram) deve exibi-lo.
+    """
+
+    def __init__(self, mensagem: str, corpo: str = '') -> None:
+        super().__init__(mensagem)
+        self.corpo = corpo
 
 
 class ClienteHttp(Protocol):
@@ -34,9 +42,12 @@ class ClienteRequests:
             resposta.raise_for_status()
             return resposta.json()
         except requests.RequestException as erro:
-            status = getattr(getattr(erro, 'response', None), 'status_code', None)
+            resposta_erro = getattr(erro, 'response', None)
+            status = getattr(resposta_erro, 'status_code', None)
+            corpo = (getattr(resposta_erro, 'text', '') or '')[:300]
             raise ErroHttp(
-                f"{metodo} {host} falhou (status={status}, erro={type(erro).__name__}); esperado 200 com JSON"
+                f"{metodo} {host} falhou (status={status}, erro={type(erro).__name__}); esperado 200 com JSON",
+                corpo,
             ) from None
         except ValueError:
             raise ErroHttp(f"{metodo} {host} respondeu corpo que não é JSON; esperado JSON") from None

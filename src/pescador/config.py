@@ -1,6 +1,6 @@
 import os
 from dataclasses import dataclass
-from typing import List, Mapping, Optional
+from typing import List, Mapping, Optional, Tuple
 
 # Perfil de busca (spec 001). Sem segredos: este arquivo é versionado em repo público.
 KEYWORDS_INCLUSAO: List[str] = [
@@ -13,13 +13,14 @@ KEYWORDS_INCLUSAO: List[str] = [
 # Aplicadas só ao título (spec 001): descrição citando "seniors" não deve descartar vaga júnior.
 KEYWORDS_EXCLUSAO: List[str] = [
     'senior', 'sênior', 'sr', 'pleno', 'especialista', 'coordenador', 'principal', 'staff',
-    'lead', 'gerente', 'manager', 'head', 'diretor', 'vp', 'iii',
+    'lead', 'gerente', 'manager', 'head', 'diretor', 'director', 'chief', 'cto', 'vp', 'vice president', 'iii',
     'analista de suporte n1', 'analista de suporte nível 1',
 ]
 
-CACHE_FILE = 'vagas_cache.json'
-MAX_CACHE_SIZE = 500
-MAX_VAGAS_POR_MENSAGEM = 10
+ESTADO_PADRAO = 'estado.json'
+
+_BUSCA_JOOBLE = 'desenvolvedor OR analista OR suporte OR assistente OR python OR c#'
+CONSULTAS_JOOBLE: List[Tuple[str, str]] = [(_BUSCA_JOOBLE, 'Brazil'), (_BUSCA_JOOBLE, 'Sao Paulo')]
 
 
 @dataclass(frozen=True)

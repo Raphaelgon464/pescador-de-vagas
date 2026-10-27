@@ -8,7 +8,7 @@ Spec: docs/specs/001-alertas-vagas.md | Status: APROVADO (2026-10-27) — repo p
 - `matcher.py` — regex por palavra inteira; exclusão aplicada ao título.
 - `store.py` — estado JSON `{id: {vaga, vista_em, alertada}}`; poda > 7 dias.
 - `sources/` — `FonteDeVagas` (Protocol: `buscar() -> list[Vaga]`) + `jooble.py`, `remoteok.py`, `adzuna.py`, `gupy.py`. Lib HTTP atrás de `http.py` fino, injetado.
-- `notifier.py` — `Notificador` (Protocol); `TelegramNotificador` (escape HTML, quebra ≤ 4096) e `ConsoleNotificador` (dry-run).
+- `notifier.py` + `mensagens.py` — `Notificador` (Protocol); `TelegramNotificador` (escape HTML, quebra ≤ 4096) e `ConsoleNotificador` (dry-run).
 - `alerta.py` / `resumo.py` — casos de uso; `main.py` escolhe modo via argumento (`alerta` | `resumo`).
 
 Estado persistido numa branch órfã `estado` (arquivo `estado.json`), commitada pelo workflow só quando muda. `actions/cache` descartado: chaves imutáveis geram churn a cada 5 min.
@@ -26,9 +26,9 @@ Workflows: `alerta.yml` (cron */5) e `resumo.yml` (cron `0 11 * * *` = 08:00 BRT
 - [x] T1 Segredos por env. Goal: A7. Files: `src/pescador/config.py`, remover `src/config.py`, `.gitignore`, `src/main.py` (só o import, legado até T6). Done-check: busca pelo token e chat id antigos no repo retorna vazio; falta de env lança erro com nome da variável. Depois `git init` + commit inicial (sem segredos).
 - [x] T2 Modelo `Vaga` + Protocol de fonte + migrar Jooble/RemoteOK com `publicada_em`. Goal: A4, A8 (parcial). Files: `models.py`, `http.py`, `sources/{base,jooble,remoteok}.py`. Done-check: execução local lista vagas normalizadas; falha de uma fonte loga e segue.
 - [x] T3 Matcher por palavra inteira. Goal: A3, U4. Files: `matcher.py`, `config.py` (keywords). Done-check: script de verificação manual com 8 títulos (analista/Israel/sênior/pleno/suporte N1/…) imprime resultado esperado.
-- [ ] T4 Store persistente. Goal: A1, A2. Files: `store.py`. Done-check: duas gravações/leituras seguidas; segunda rodada vê tudo como já visto; poda funciona.
-- [ ] T5 Notificador (Telegram + Console). Goal: A5. Files: `notifier.py`. Done-check: 60 vagas fictícias geram N mensagens ≤ 4096 caracteres, nenhuma perdida, `<`/`&` escapados.
-- [ ] T6 Modo `alerta`. Goal: U1, U3, A1. Files: `alerta.py`, `main.py`. Done-check: dry-run duas vezes: 1ª lista novas, 2ª nada. Marca `alertada` só após envio com sucesso.
+- [x] T4 Store persistente. Goal: A1, A2. Files: `store.py`. Done-check: duas gravações/leituras seguidas; segunda rodada vê tudo como já visto; poda funciona.
+- [x] T5 Notificador (Telegram + Console). Goal: A5. Files: `notifier.py`. Done-check: 60 vagas fictícias geram N mensagens ≤ 4096 caracteres, nenhuma perdida, `<`/`&` escapados.
+- [x] T6 Modo `alerta`. Goal: U1, U3, A1. Files: `alerta.py`, `main.py`. Done-check: dry-run duas vezes: 1ª lista novas, 2ª nada. Marca `alertada` só após envio com sucesso.
 - [ ] T7 Modo `resumo`. Goal: U2, A6. Files: `resumo.py`, `main.py`. Done-check: dry-run lista só `publicada_em` ≤ 24h; marca as já alertadas.
 - [ ] T8 Fontes BR: spike (Gupy, Adzuna, Programathor/Remotar: API existe? ToS? data de publicação?) → implementar as aprovadas. Goal: A8. Files: `sources/adzuna.py`, `sources/gupy.py`, `docs/decisions/LOG.md`. Done-check: ≥ 2 fontes com cobertura BR retornam vagas reais em execução local.
 - [ ] T9 Workflows + branch `estado` + Secrets. Goal: U1, U2, A2. Files: `.github/workflows/{alerta,resumo}.yml`, remover `buscar-vagas.yml`, `src/requirements.txt`. Done-check: `workflow_dispatch` manual envia alerta real no Telegram; 2º disparo não reenvia.

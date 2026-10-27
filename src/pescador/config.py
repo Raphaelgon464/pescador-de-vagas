@@ -6,13 +6,15 @@ from typing import List, Mapping, Optional
 KEYWORDS_INCLUSAO: List[str] = [
     'c#', '.net', 'python', 'power bi', 'suporte', 'analista',
     'full stack', 'api', 'jr', 'júnior', 'junior', 'assistente',
-    'ti', 'tecnologia', 'desenvolvedor', 'programador', 'estágio',
+    'ti', 'tecnologia', 'desenvolvedor', 'programador', 'estágio', 'estagiário',
     'administrativo', 'auxiliar',
 ]
 
+# Aplicadas só ao título (spec 001): descrição citando "seniors" não deve descartar vaga júnior.
 KEYWORDS_EXCLUSAO: List[str] = [
-    'senior', 'sênior', 'sr', 'lead', 'gerente', 'head',
-    'diretor', 'vp',
+    'senior', 'sênior', 'sr', 'pleno', 'especialista', 'coordenador', 'principal', 'staff',
+    'lead', 'gerente', 'manager', 'head', 'diretor', 'vp', 'iii',
+    'analista de suporte n1', 'analista de suporte nível 1',
 ]
 
 CACHE_FILE = 'vagas_cache.json'

@@ -5,3 +5,4 @@
 2026-10-27 | Estado em branch órfã `estado`, não actions/cache | cache imutável gera churn a cada 5 min | - | -
 2026-10-27 | Repo público; segredos só em GitHub Secrets, branch estado guarda só dados públicos das vagas | minutos ilimitados no Actions | - | -
 2026-10-27 | Jooble: campos reais são 'snippet'\/'link'\/'updated' (código legado lia 'description'\/'url'); RemoteOK 'tags' é lista de strings | achado na T2 | - | -
+2026-10-27 | Matcher normaliza acentos e usa fronteira de palavra; exclusão ampliada (pleno, especialista, coordenador, principal, staff, manager, III, analista de suporte n1/nível 1) | spec pede "pleno+" e N1; interpretação mais ampla de "pleno+" | - | -
